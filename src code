@@ -1,0 +1,69 @@
+# Load the leaflet library
+library(leaflet)
+
+# Change addTiles() to addProviderTiles() and set the provider argument to "CartoDB"
+# You can also use Esri or OSM
+leaflet() %>% 
+    addProviderTiles(provider = "CartoDB")
+    
+# Create a leaflet map wihtout labels that uses the CartoDB.PositronNoLabels provider tile
+# leaflet() %>% 
+#    addProviderTiles(provider = "CartoDB.PositronNoLabels")
+
+#  Maps are zoomed out by default
+# Load the map centered on a particular point using the setView() function to avoid zooming and panning
+leaflet()  %>% 
+    addProviderTiles("CartoDB")  %>% 
+    setView(lng = database$lon, lat = database$lat, zoom = 6)
+    
+ # setting minZoom and dragging creates interactivity in the map that maintains focus on a specific area
+ leaflet(options = leafletOptions(
+                    # Set minZoom and dragging 
+                    minZoom = 12, dragging = TRUE))  %>% 
+  addProviderTiles("CartoDB")  %>% 
+  
+  # Set default zoom level 
+  setView(lng = database$lon[2], lat = database$lat[2], zoom = 14) %>% 
+  
+  # Set max bounds of map 
+  setMaxBounds(lng1 = database$lon[2] + .05, 
+               lat1 = database$lat[2] + .05, 
+               lng2 = database$lon[2] - .05, 
+               lat2 = database$lat[2] - .05) 
+               
+# Add layers to the base map using ggplot
+# We will add map location markers by piping the 
+# result of addTiles() or addProviderTiles() into the add markers function
+# and add a zoom of 12
+leaflet() %>% 
+    addProviderTiles("CartoDB") %>% 
+    addMarkers(lng = database$lon, lat = database$lat)  %>% 
+    setView(lng = database$lon, lat = database$lat, zoom = 12)
+    
+# Add popups to the map to provide more information about the map
+# Popups will appear when the marker is clicked
+# Specify the popup argument in the addMarkers() function.
+
+# Store a map in an object when you want to preserve it.
+# Pipe the object into functions to add or edit the map's layers. 
+# Store leaflet hq map in an object called map
+map <- leaflet() %>%
+          addProviderTiles("CartoDB") %>%
+          # Use database of your choice to add the necessary column as popups
+          addMarkers(lng = database$lon, lat = database$lat,
+                     popup = dc_hq$hq)
+
+# Center the view of map on feature of choice with a zoom of 5
+map_zoom <- map %>%
+      setView(lat = ___, lng = ___,
+              zoom = 5)
+              
+# Print map_zoom
+map_zoom
+
+# To reset the view and remove markers, use clear_markers() and clear_bounds()
+# Remove markers, reset bounds, and store the updated map in the m object
+map_clear <- map  %>%
+        clearMarkers()  %>% 
+        clearBounds()
+
