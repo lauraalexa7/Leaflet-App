@@ -9,7 +9,6 @@ leaflet() %>%
 # Create a leaflet map wihtout labels that uses the CartoDB.PositronNoLabels provider tile
 # leaflet() %>% 
 #    addProviderTiles(provider = "CartoDB.PositronNoLabels")
-
 #  Maps are zoomed out by default
 # Load the map centered on a particular point using the setView() function to avoid zooming and panning
 leaflet()  %>% 
